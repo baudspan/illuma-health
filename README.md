@@ -81,5 +81,3 @@ This system follows HIPAA/DPDP guidelines by ensuring:
 - Audit trails via `created_at` timestamps.
 - Explicit CORS policy.
 
-## 📄 License
-MIT
