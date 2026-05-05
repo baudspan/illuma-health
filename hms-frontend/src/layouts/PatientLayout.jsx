@@ -15,6 +15,7 @@ import {
 export default function PatientLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const userName = localStorage.getItem('userName') || 'Patient';
 
   const menuItems = [
     { name: 'My Dashboard', icon: <Home size={20} />, path: '/patient' },
@@ -54,7 +55,7 @@ export default function PatientLayout() {
             className="btn btn-outline" 
             style={{ width: '100%', borderColor: 'var(--color-error)', color: 'var(--color-error)' }}
             onClick={() => {
-              localStorage.removeItem('userRole');
+              localStorage.clear();
               navigate('/login');
             }}
           >
@@ -73,10 +74,10 @@ export default function PatientLayout() {
               <Bell size={20} />
             </button>
             <div className="user-profile">
-              <div className="avatar" style={{ backgroundColor: 'var(--color-success)' }}>SM</div>
+              <div className="avatar" style={{ backgroundColor: 'var(--color-success)' }}>{userName.split(' ').map(n => n[0]).join('')}</div>
               <div className="user-info">
-                <span className="user-name">Suresh Mishra</span>
-                <span className="user-role">UHID: ILL-8892</span>
+                <span className="user-name">{userName}</span>
+                <span className="user-role">Patient Portal</span>
               </div>
             </div>
           </div>

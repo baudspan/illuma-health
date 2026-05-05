@@ -17,10 +17,10 @@ export default function PatientVitalsModal({ isOpen, onClose, patientId }) {
     if (!patientId) return;
     setLoading(true);
     try {
-      const resVitals = await fetch(`http://localhost:8000/api/vitals/${patientId}`);
+      const resVitals = await fetch(`http://127.0.0.1:8000/api/vitals/${patientId}`);
       if (resVitals.ok) setVitals(await resVitals.json());
 
-      const resPresc = await fetch(`http://localhost:8000/api/prescriptions/${patientId}`);
+      const resPresc = await fetch(`http://127.0.0.1:8000/api/prescriptions/${patientId}`);
       if (resPresc.ok) setPrescriptions(await resPresc.json());
     } catch (err) {
       console.error(err);
@@ -44,7 +44,7 @@ export default function PatientVitalsModal({ isOpen, onClose, patientId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:8000/api/vitals', {
+      const res = await fetch('http://127.0.0.1:8000/api/vitals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

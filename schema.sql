@@ -1,7 +1,8 @@
-CREATE DATABASE IF NOT EXISTS HospitalManagement;
+DROP DATABASE IF EXISTS HospitalManagement;
+CREATE DATABASE HospitalManagement;
 USE HospitalManagement;
 
--- 1. Support Entities (Missing from original but required for Foreign Keys)
+-- 1. Support Entities
 CREATE TABLE Department (
     Department_ID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(100) NOT NULL,
@@ -17,13 +18,14 @@ CREATE TABLE Room (
     Status ENUM('Available', 'Occupied', 'Maintenance') DEFAULT 'Available'
 );
 
--- 2. Core Entities: Staff Supertype and Subtypes
+-- 2. Core Entities: Staff
 CREATE TABLE Staff (
     Staff_ID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(100) NOT NULL,
     Role ENUM('Admin', 'Doctor', 'Nurse', 'Receptionist', 'Pharmacist', 'Lab_Tech', 'Dietician', 'Other') DEFAULT 'Other',
     Contact VARCHAR(15),
-    Email VARCHAR(100),
+    Email VARCHAR(100) UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
     DOB DATE,
     Gender ENUM('M', 'F', 'Other'),
     Address TEXT,
@@ -65,6 +67,8 @@ CREATE TABLE Patient (
     DOB DATE,
     Gender ENUM('M', 'F', 'Other'),
     Contact VARCHAR(15),
+    Email VARCHAR(100) UNIQUE,
+    password_hash VARCHAR(255),
     Address TEXT,
     Emergency_Contact VARCHAR(15)
 );
@@ -259,4 +263,12 @@ CREATE TABLE Vital (
     Recorded_By INT,
     FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID) ON DELETE CASCADE,
     FOREIGN KEY (Recorded_By) REFERENCES Staff(Staff_ID) ON DELETE SET NULL
+);
+CREATE TABLE user_login (
+    login_id INT PRIMARY KEY AUTO_INCREMENT,
+    firebase_uid VARCHAR(128) UNIQUE,
+    email VARCHAR(100) UNIQUE,
+    display_name VARCHAR(100),
+    role VARCHAR(50),
+    last_login DATETIME
 );

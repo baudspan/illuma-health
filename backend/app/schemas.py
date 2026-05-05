@@ -19,6 +19,16 @@ class PatientResponse(PatientBase):
     class Config:
         from_attributes = True
 
+class UserInfo(BaseModel):
+    name: str
+    id: int
+    role: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    user: UserInfo
+
 class MedicationBase(BaseModel):
     Medicine_Name: str
     Dosage: str
@@ -65,3 +75,58 @@ class PrescriptionResponse(BaseModel):
     
     class Config:
         from_attributes = True
+class StaffCreate(BaseModel):
+    Name: str
+    Role: str
+    Contact: Optional[str] = None
+    Email: str
+    password: str
+    Department_ID: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+class DoctorAssign(BaseModel):
+    doctor_id: int
+
+class DietPlanCreate(BaseModel):
+    plan: str
+
+    class Config:
+        from_attributes = True
+class AppointmentCreate(BaseModel):
+    Patient_ID: int
+    Doctor_ID: int
+    Department_ID: Optional[int] = None
+    Appointment_Date: date
+    Appointment_Time: str
+
+class AppointmentStatusUpdate(BaseModel):
+    status: str
+
+class LabOrderCreate(BaseModel):
+    Patient_ID: int
+    Doctor_ID: int
+    Test_ID: int
+
+class GenerateResultSchema(BaseModel):
+    Order_ID: int
+
+class InventoryCreate(BaseModel):
+    Item_Name: str
+    Stock_Quantity: int = 0
+    Unit_Price: float = 0.0
+
+class RestockSchema(BaseModel):
+    quantity: int
+
+class RequestMedicineSchema(BaseModel):
+    Prescription_ID: int
+    Item_ID: int
+    Quantity_Dispensed: int
+
+class GoogleAuthData(BaseModel):
+    uid: str
+    email: str
+    displayName: Optional[str] = None
+    role: str = 'Patient'

@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+backend/venv/
+.env
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project Specific
+*.pkl
+*.webp
+*.png
+*.jpg
+*.jpeg
+!hms-frontend/public/*.png
+!hms-frontend/public/*.jpg
+!hms-frontend/public/*.jpeg
+!hms-frontend/public/*.webp

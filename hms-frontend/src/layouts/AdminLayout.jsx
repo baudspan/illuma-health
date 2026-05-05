@@ -8,16 +8,19 @@ import {
   Archive,
   LogOut,
   Bell,
-  ShieldCheck
+  ShieldCheck,
+  Bed
 } from 'lucide-react';
 
 export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const userName = localStorage.getItem('userName') || 'System Admin';
 
   const menuItems = [
     { name: 'Hospital Overview', icon: <Home size={20} />, path: '/admin' },
     { name: 'Staff Directory', icon: <Users size={20} />, path: '/admin/staff' },
+    { name: 'Ward Management', icon: <Bed size={20} />, path: '/admin/wards' },
     { name: 'Departments', icon: <Building size={20} />, path: '/admin/departments' },
     { name: 'Financials', icon: <CreditCard size={20} />, path: '/admin/finance' },
     { name: 'Inventory', icon: <Archive size={20} />, path: '/admin/inventory' },
@@ -52,7 +55,7 @@ export default function AdminLayout() {
             className="btn btn-outline" 
             style={{ width: '100%', borderColor: 'var(--color-error)', color: 'var(--color-error)' }}
             onClick={() => {
-              localStorage.removeItem('userRole');
+              localStorage.clear();
               navigate('/login');
             }}
           >
@@ -71,9 +74,9 @@ export default function AdminLayout() {
               <Bell size={20} />
             </button>
             <div className="user-profile">
-              <div className="avatar" style={{ backgroundColor: 'var(--color-warning)' }}>AD</div>
+              <div className="avatar" style={{ backgroundColor: 'var(--color-warning)' }}>{userName.split(' ').map(n => n[0]).join('')}</div>
               <div className="user-info">
-                <span className="user-name">System Admin</span>
+                <span className="user-name">{userName}</span>
                 <span className="user-role">Management</span>
               </div>
             </div>

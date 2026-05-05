@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { CreditCard, Download, Printer, ShieldCheck } from 'lucide-react';
 
 export default function PatientBilling() {
-  const patientId = 1;
   const [bill, setBill] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isPaid, setIsPaid] = useState(false);
+  const patientId = 1; // Default to Rajesh for testing
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/billing/generate/${patientId}`)
+    fetch(`http://127.0.0.1:8000/api/billing/generate/${patientId}`)
       .then(res => res.json())
       .then(data => {
         setBill(data);
@@ -35,7 +35,7 @@ export default function PatientBilling() {
 
       {loading ? <p>Calculating charges...</p> : bill ? (
         <div className="glass-panel" style={{ maxWidth: '800px', margin: '0 auto', padding: '40px' }}>
-          
+
           {/* Invoice Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid var(--color-border)', paddingBottom: '24px', marginBottom: '32px' }}>
             <div>
@@ -100,7 +100,7 @@ export default function PatientBilling() {
               <div style={{ fontSize: '32px', fontWeight: 800, color: 'var(--color-primary)' }}>₹{bill.Grand_Total.toFixed(2)}</div>
             </div>
           </div>
-          
+
           <div style={{ marginTop: '24px', textAlign: 'center' }}>
             {isPaid ? (
               <div style={{ padding: '16px', background: 'rgba(0, 196, 159, 0.1)', color: 'var(--color-success)', borderRadius: '8px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>

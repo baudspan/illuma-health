@@ -3,6 +3,7 @@ import { Calendar, FileText, Utensils, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function PatientDashboardHome() {
+  const userName = localStorage.getItem('userName') || 'Patient';
   const patientId = 1;
   const navigate = useNavigate();
   const [vitals, setVitals] = useState(null);
@@ -32,7 +33,10 @@ export default function PatientDashboardHome() {
   }, [patientId]);
   return (
     <div className="dashboard-home">
-      <h1 style={{ marginBottom: '24px' }}>Hello, Suresh!</h1>
+      <div style={{ marginBottom: '32px' }}>
+        <h1 style={{ fontSize: '32px', marginBottom: '8px' }}>Hello, {userName}! 👋</h1>
+        <p className="label">Welcome back to your health portal. Here is your current status.</p>
+      </div>
       
       {/* Patient Specific Grid */}
       <div className="stats-grid" style={{ marginBottom: '32px' }}>

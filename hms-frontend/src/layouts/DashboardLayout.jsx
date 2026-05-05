@@ -8,17 +8,20 @@ import {
   Pill, 
   FlaskConical, 
   LogOut,
-  Bell
+  Bell,
+  Bed
 } from 'lucide-react';
 
 export default function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const userName = localStorage.getItem('userName') || 'Staff Member';
 
   const menuItems = [
     { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/' },
     { name: 'Appointments', icon: <Calendar size={20} />, path: '/appointments' },
     { name: 'Patients (IPD/OPD)', icon: <Users size={20} />, path: '/patients' },
+    { name: 'Ward Management', icon: <Bed size={20} />, path: '/wards' },
     { name: 'Lab & Diagnostics', icon: <FlaskConical size={20} />, path: '/lab' },
     { name: 'Pharmacy', icon: <Pill size={20} />, path: '/pharmacy' },
     { name: 'Emergency', icon: <Activity size={20} />, path: '/emergency' },
@@ -54,7 +57,7 @@ export default function DashboardLayout() {
             className="btn btn-outline" 
             style={{ width: '100%', borderColor: 'var(--color-error)', color: 'var(--color-error)' }}
             onClick={() => {
-              localStorage.removeItem('userRole');
+              localStorage.clear();
               navigate('/login');
             }}
           >
@@ -76,10 +79,10 @@ export default function DashboardLayout() {
               <span className="notification-dot"></span>
             </button>
             <div className="user-profile">
-              <div className="avatar">RS</div>
+              <div className="avatar">{userName.split(' ').map(n => n[0]).join('')}</div>
               <div className="user-info">
-                <span className="user-name">Dr. Ramesh Sharma</span>
-                <span className="user-role">Cardiologist</span>
+                <span className="user-name">{userName}</span>
+                <span className="user-role">Medical Staff</span>
               </div>
             </div>
           </div>

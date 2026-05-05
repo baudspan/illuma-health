@@ -10,7 +10,7 @@ export default function NurseVitals() {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/patients')
+    fetch('http://127.0.0.1:8000/api/patients')
       .then(r => r.json())
       .then(data => { setPatients(data); setLoading(false); })
       .catch(() => setLoading(false));
@@ -56,7 +56,16 @@ export default function NurseVitals() {
                 <td style={{ padding: '16px 24px', fontWeight: 600 }}>{p.id}</td>
                 <td style={{ padding: '16px 24px' }}>{p.name}</td>
                 <td style={{ padding: '16px 24px' }}>
-                  <span style={{ padding: '4px 10px', borderRadius: '12px', fontSize: '12px', fontWeight: 600, background: 'rgba(0, 196, 159, 0.1)', color: 'var(--color-success)' }}>{p.status}</span>
+                  <span style={{ 
+                    padding: '4px 10px', 
+                    borderRadius: '12px', 
+                    fontSize: '12px', 
+                    fontWeight: 600, 
+                    background: p.status === 'Stable' ? 'rgba(0, 196, 159, 0.1)' : 'rgba(255, 77, 109, 0.1)', 
+                    color: p.status === 'Stable' ? 'var(--color-success)' : 'var(--color-error)' 
+                  }}>
+                    {p.status}
+                  </span>
                 </td>
                 <td style={{ padding: '16px 24px', textAlign: 'right' }}>
                   <button className="btn btn-outline" style={{ padding: '6px 14px', fontSize: '12px' }} onClick={() => openVitals(p.id)}>

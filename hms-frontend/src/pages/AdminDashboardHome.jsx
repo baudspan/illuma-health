@@ -8,9 +8,9 @@ export default function AdminDashboardHome() {
 
   useEffect(() => {
     Promise.all([
-      fetch('http://localhost:8000/api/admin/stats').then(r => r.json()),
-      fetch('http://localhost:8000/api/finance/summary').then(r => r.json()),
-      fetch('http://localhost:8000/api/departments').then(r => r.json())
+      fetch('http://127.0.0.1:8000/api/admin/stats').then(r => r.json()),
+      fetch('http://127.0.0.1:8000/api/finance/summary').then(r => r.json()),
+      fetch('http://127.0.0.1:8000/api/departments').then(r => r.json())
     ]).then(([s, f, d]) => {
       setStats(s);
       setFinance(f);

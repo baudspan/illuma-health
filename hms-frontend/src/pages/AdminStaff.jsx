@@ -3,31 +3,49 @@ import { Plus, Trash2, Search } from 'lucide-react';
 
 export default function AdminStaff() {
   const [staff, setStaff] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [showAdd, setShowAdd] = useState(false);
-  const [form, setForm] = useState({ Name: '', Role: 'Doctor', Contact: '', Email: '' });
+  const [form, setForm] = useState({ Name: '', Role: 'Doctor', Contact: '', Email: '', password: 'Illuma@2026', Department_ID: '' });
 
   const fetchStaff = () => {
-    fetch('http://localhost:8000/api/staff')
+    fetch('http://127.0.0.1:8000/api/staff')
       .then(r => r.json())
       .then(data => { setStaff(data); setLoading(false); })
       .catch(() => setLoading(false));
   };
 
-  useEffect(() => { fetchStaff(); }, []);
+  const fetchDepts = () => {
+    fetch('http://127.0.0.1:8000/api/departments')
+      .then(r => r.json())
+      .then(data => setDepartments(data))
+      .catch(console.error);
+  };
+
+  useEffect(() => { 
+    fetchStaff(); 
+    fetchDepts();
+  }, []);
 
   const handleAdd = async (e) => {
     e.preventDefault();
-    await fetch('http://localhost:8000/api/staff', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+    const payload = { ...form };
+    if (payload.Role !== 'Doctor') delete payload.Department_ID;
+    
+    await fetch('http://127.0.0.1:8000/api/staff', { 
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify(payload) 
+    });
     setShowAdd(false);
-    setForm({ Name: '', Role: 'Doctor', Contact: '', Email: '' });
+    setForm({ Name: '', Role: 'Doctor', Contact: '', Email: '', password: 'Illuma@2026', Department_ID: '' });
     fetchStaff();
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm('Remove this staff member?')) return;
-    await fetch(`http://localhost:8000/api/staff/${id}`, { method: 'DELETE' });
+    await fetch(`http://127.0.0.1:8000/api/staff/${id}`, { method: 'DELETE' });
     fetchStaff();
   };
 
@@ -57,7 +75,7 @@ export default function AdminStaff() {
 
       {showAdd && (
         <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px' }}>
-          <form onSubmit={handleAdd} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr auto', gap: '16px', alignItems: 'end' }}>
+          <form onSubmit={handleAdd} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr)) auto', gap: '16px', alignItems: 'end' }}>
             <div>
               <label className="label">Name</label>
               <input className="input-field" value={form.Name} onChange={e => setForm({...form, Name: e.target.value})} required />
@@ -68,6 +86,17 @@ export default function AdminStaff() {
                 <option>Doctor</option><option>Nurse</option><option>Admin</option><option>Receptionist</option><option>Pharmacist</option><option>Lab_Tech</option><option>Dietician</option><option>Other</option>
               </select>
             </div>
+            {form.Role === 'Doctor' && (
+              <div>
+                <label className="label">Department</label>
+                <select className="input-field" value={form.Department_ID} onChange={e => setForm({...form, Department_ID: e.target.value})} required>
+                  <option value="">Select Dept</option>
+                  {departments.map(d => (
+                    <option key={d.Department_ID} value={d.Department_ID}>{d.Name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div>
               <label className="label">Contact</label>
               <input className="input-field" value={form.Contact} onChange={e => setForm({...form, Contact: e.target.value})} />

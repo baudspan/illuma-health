@@ -24,7 +24,8 @@ class Staff(Base):
     Name = Column(String(100), nullable=False)
     Role = Column(String(50))
     Contact = Column(String(15))
-    Email = Column(String(100))
+    Email = Column(String(100), unique=True, index=True)
+    password_hash = Column(String(255), nullable=False)
     DOB = Column(Date)
     Gender = Column(String(1))
     Address = Column(Text)
@@ -60,6 +61,8 @@ class Patient(Base):
     DOB = Column(Date)
     Gender = Column(String(1))
     Contact = Column(String(15))
+    Email = Column(String(100), unique=True)
+    password_hash = Column(String(255))
     Address = Column(Text)
     Emergency_Contact = Column(String(15))
 

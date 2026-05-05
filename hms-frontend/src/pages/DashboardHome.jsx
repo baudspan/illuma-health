@@ -7,6 +7,7 @@ import LabAlertsModal from '../components/LabAlertsModal';
 import RequestMedicineModal from '../components/RequestMedicineModal';
 
 export default function DashboardHome() {
+  const userName = localStorage.getItem('userName') || 'Doctor';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVitalsOpen, setIsVitalsOpen] = useState(false);
   const [isPrescriptionOpen, setIsPrescriptionOpen] = useState(false);
@@ -20,9 +21,9 @@ export default function DashboardHome() {
     const fetchData = async () => {
       try {
         const [ptsRes, aptsRes, alertsRes] = await Promise.all([
-          fetch('http://localhost:8000/api/patients'),
-          fetch('http://localhost:8000/api/appointments'),
-          fetch('http://localhost:8000/api/labs/alerts')
+          fetch('http://127.0.0.1:8000/api/patients'),
+          fetch('http://127.0.0.1:8000/api/appointments'),
+          fetch('http://127.0.0.1:8000/api/labs/alerts')
         ]);
         
         const pts = await ptsRes.json();
@@ -48,7 +49,7 @@ export default function DashboardHome() {
   return (
     <div className="dashboard-home">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <h1 style={{ margin: 0 }}>Welcome back, Dr. Sharma</h1>
+        <h1 style={{ margin: 0 }}>Welcome back, {userName}</h1>
         <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
           <Plus size={18} /> New Patient
         </button>

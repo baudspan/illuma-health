@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import DashboardLayout from './layouts/DashboardLayout';
 import DashboardHome from './pages/DashboardHome';
@@ -26,7 +26,32 @@ import AdminStaff from './pages/AdminStaff';
 import AdminDepartments from './pages/AdminDepartments';
 import AdminFinance from './pages/AdminFinance';
 import AdminInventory from './pages/AdminInventory';
+import WardManagement from './pages/WardManagement';
 import './index.css';
+
+// Protected Route Wrapper
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('userRole');
+  const location = useLocation();
+
+  if (!token) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
+    // Redirect to their own dashboard if they try to access another role's page
+    const dashboardMap = {
+      'Admin': '/admin',
+      'Doctor': '/',
+      'Nurse': '/nurse',
+      'Patient': '/patient'
+    };
+    return <Navigate to={dashboardMap[userRole] || '/login'} replace />;
+  }
+
+  return children;
+};
 
 function App() {
   return (
@@ -34,16 +59,19 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         
-        <Route path="/" element={<DashboardLayout />}>
+        {/* Doctor / Staff Routes */}
+        <Route path="/" element={<ProtectedRoute allowedRoles={['Doctor']}><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<DashboardHome />} />
           <Route path="appointments" element={<DoctorAppointments />} />
           <Route path="patients" element={<PatientsList role="Doctor" />} />
           <Route path="lab" element={<DoctorLab />} />
           <Route path="pharmacy" element={<DoctorPharmacy />} />
           <Route path="emergency" element={<DoctorEmergency />} />
+          <Route path="wards" element={<WardManagement />} />
         </Route>
 
-        <Route path="/patient" element={<PatientLayout />}>
+        {/* Patient Routes */}
+        <Route path="/patient" element={<ProtectedRoute allowedRoles={['Patient']}><PatientLayout /></ProtectedRoute>}>
           <Route index element={<PatientDashboardHome />} />
           <Route path="appointments" element={<PatientAppointments />} />
           <Route path="records" element={<PatientRecords />} />
@@ -52,7 +80,8 @@ function App() {
           <Route path="billing" element={<PatientBilling />} />
         </Route>
         
-        <Route path="/nurse" element={<NurseLayout />}>
+        {/* Nurse Routes */}
+        <Route path="/nurse" element={<ProtectedRoute allowedRoles={['Nurse']}><NurseLayout /></ProtectedRoute>}>
           <Route index element={<NurseDashboardHome />} />
           <Route path="patients" element={<PatientsList role="Nurse" />} />
           <Route path="vitals" element={<NurseVitals />} />
@@ -60,12 +89,14 @@ function App() {
           <Route path="discharge" element={<NurseDischarge />} />
         </Route>
         
-        <Route path="/admin" element={<AdminLayout />}>
+        {/* Admin Routes */}
+        <Route path="/admin" element={<ProtectedRoute allowedRoles={['Admin']}><AdminLayout /></ProtectedRoute>}>
           <Route index element={<AdminDashboardHome />} />
           <Route path="staff" element={<AdminStaff />} />
           <Route path="departments" element={<AdminDepartments />} />
           <Route path="finance" element={<AdminFinance />} />
           <Route path="inventory" element={<AdminInventory />} />
+          <Route path="wards" element={<WardManagement />} />
         </Route>
         
         <Route path="*" element={<Navigate to="/login" replace />} />
